@@ -1,0 +1,12 @@
+<% content_for :title, "Editing purchase invoice" %>
+
+<h1>Editing purchase invoice</h1>
+
+<%= render "form", purchase_invoice: @purchase_invoice %>
+
+<br>
+
+<div>
+  <%= link_to "Show this purchase invoice", @purchase_invoice %> |
+  <%= link_to "Back to purchase invoices", purchase_invoices_path %>
+</div>

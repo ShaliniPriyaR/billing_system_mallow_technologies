@@ -7,3 +7,24 @@
 #   ["Action", "Comedy", "Drama", "Horror"].each do |genre_name|
 #     MovieGenre.find_or_create_by!(name: genre_name)
 #   end
+Product.create!([
+  { name: "Ball Pen", product_code: "PEN001", stock_available: 200, unit_price: 10.00, tax_percentage: 5 },
+  { name: "Gel Pen", product_code: "PEN002", stock_available: 150, unit_price: 15.00, tax_percentage: 5 },
+  { name: "Pencil", product_code: "PEN003", stock_available: 300, unit_price: 5.00 },
+  { name: "Notebook A4", product_code: "NOTE002", stock_available: 80, unit_price: 80.00, tax_percentage: 12 },
+  { name: "Eraser", product_code: "STAT001", stock_available: 250, unit_price: 3.00, tax_percentage: 5 },
+  { name: "Sharpener", product_code: "STAT002", stock_available: 180, unit_price: 4.00, tax_percentage: 5 },
+  { name: "Marker Pen", product_code: "MARK001", stock_available: 120, unit_price: 25.00 },
+  { name: "Highlighter", product_code: "MARK002", stock_available: 90, unit_price: 30.00, tax_percentage: 12 },
+  { name: "Stapler", product_code: "OFF001", stock_available: 40, unit_price: 120.00, tax_percentage: 18 }
+])
+
+Denomination.create!([
+  { value: 500, available_count: 10 },
+  { value: 50, available_count: 20 },
+  { value: 20, available_count: 30 },
+  { value: 10,  available_count: 50 },
+  { value: 5,  available_count: 100 },
+  { value: 2,  available_count: 100 },
+  { value: 1,  available_count: 100 }
+])

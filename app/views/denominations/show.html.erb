@@ -1,0 +1,10 @@
+<p style="color: green"><%= notice %></p>
+
+<%= render @denomination %>
+
+<div>
+  <%= link_to "Edit this denomination", edit_denomination_path(@denomination) %> |
+  <%= link_to "Back to denominations", denominations_path %>
+
+  <%= button_to "Destroy this denomination", @denomination, method: :delete %>
+</div>

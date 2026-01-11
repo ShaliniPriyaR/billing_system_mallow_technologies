@@ -1,0 +1,27 @@
+<%= form_with(model: denomination) do |form| %>
+  <% if denomination.errors.any? %>
+    <div style="color: red">
+      <h2><%= pluralize(denomination.errors.count, "error") %> prohibited this denomination from being saved:</h2>
+
+      <ul>
+        <% denomination.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div>
+    <%= form.label :value, style: "display: block" %>
+    <%= form.number_field :value %>
+  </div>
+
+  <div>
+    <%= form.label :available_count, style: "display: block" %>
+    <%= form.number_field :available_count %>
+  </div>
+
+  <div>
+    <%= form.submit %>
+  </div>
+<% end %>

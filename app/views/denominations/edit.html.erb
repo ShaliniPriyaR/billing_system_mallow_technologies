@@ -1,0 +1,12 @@
+<% content_for :title, "Editing denomination" %>
+
+<h1>Editing denomination</h1>
+
+<%= render "form", denomination: @denomination %>
+
+<br>
+
+<div>
+  <%= link_to "Show this denomination", @denomination %> |
+  <%= link_to "Back to denominations", denominations_path %>
+</div>

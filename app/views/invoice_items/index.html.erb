@@ -1,0 +1,16 @@
+<p style="color: green"><%= notice %></p>
+
+<% content_for :title, "Invoice items" %>
+
+<h1>Invoice items</h1>
+
+<div id="invoice_items">
+  <% @invoice_items.each do |invoice_item| %>
+    <%= render invoice_item %>
+    <p>
+      <%= link_to "Show this invoice item", invoice_item %>
+    </p>
+  <% end %>
+</div>
+
+<%= link_to "New invoice item", new_invoice_item_path %>

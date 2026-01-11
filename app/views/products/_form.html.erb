@@ -17,26 +17,31 @@
   </div>
 
   <div>
+    </br>
     <%= form.label :product_code, style: "display: block" %>
     <%= form.text_field :product_code %>
   </div>
 
   <div>
+    </br>
     <%= form.label :stock_available, style: "display: block" %>
-    <%= form.number_field :stock_available %>
+    <%= form.number_field :stock_available, min: 0 %>
   </div>
 
   <div>
+    </br>
     <%= form.label :unit_price, style: "display: block" %>
     <%= form.text_field :unit_price %>
   </div>
 
   <div>
+    </br>
     <%= form.label :tax_percentage, style: "display: block" %>
     <%= form.text_field :tax_percentage %>
   </div>
 
   <div>
+    </br>
     <%= form.submit %>
   </div>
 <% end %>

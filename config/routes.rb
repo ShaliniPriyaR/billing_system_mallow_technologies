@@ -1,8 +1,6 @@
 Rails.application.routes.draw do
-  resources :denominations
-  resources :invoice_items
+  root "products#index"
   resources :purchase_invoices
-  resources :customers
   resources :products
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 

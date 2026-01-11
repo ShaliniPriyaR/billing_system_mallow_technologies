@@ -8,15 +8,15 @@
 #     MovieGenre.find_or_create_by!(name: genre_name)
 #   end
 Product.create!([
-  { name: "Ball Pen", product_code: "PEN001", stock_available: 200, unit_price: 10.00, tax_percentage: 5 },
-  { name: "Gel Pen", product_code: "PEN002", stock_available: 150, unit_price: 15.00, tax_percentage: 5 },
-  { name: "Pencil", product_code: "PEN003", stock_available: 300, unit_price: 5.00 },
-  { name: "Notebook A4", product_code: "NOTE002", stock_available: 80, unit_price: 80.00, tax_percentage: 12 },
-  { name: "Eraser", product_code: "STAT001", stock_available: 250, unit_price: 3.00, tax_percentage: 5 },
-  { name: "Sharpener", product_code: "STAT002", stock_available: 180, unit_price: 4.00, tax_percentage: 5 },
-  { name: "Marker Pen", product_code: "MARK001", stock_available: 120, unit_price: 25.00 },
-  { name: "Highlighter", product_code: "MARK002", stock_available: 90, unit_price: 30.00, tax_percentage: 12 },
-  { name: "Stapler", product_code: "OFF001", stock_available: 40, unit_price: 120.00, tax_percentage: 18 }
+  { name: "Ball Pen", product_code: "P001", stock_available: 200, unit_price: 10.00, tax_percentage: 5 },
+  { name: "Gel Pen", product_code: "P002", stock_available: 150, unit_price: 15.00, tax_percentage: 5 },
+  { name: "Pencil", product_code: "P003", stock_available: 300, unit_price: 5.00 },
+  { name: "Notebook A4", product_code: "P004", stock_available: 80, unit_price: 80.00, tax_percentage: 12 },
+  { name: "Eraser", product_code: "P005", stock_available: 250, unit_price: 3.00, tax_percentage: 5 },
+  { name: "Sharpener", product_code: "P006", stock_available: 180, unit_price: 4.00, tax_percentage: 5 },
+  { name: "Marker Pen", product_code: "P007", stock_available: 120, unit_price: 25.00 },
+  { name: "Highlighter", product_code: "P008", stock_available: 90, unit_price: 30.00, tax_percentage: 12 },
+  { name: "Stapler", product_code: "P009", stock_available: 40, unit_price: 120.00, tax_percentage: 18 }
 ])
 
 Denomination.create!([

@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  root "products#index"
+  root "welcome#home"
   resources :purchase_invoices
   resources :products
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html

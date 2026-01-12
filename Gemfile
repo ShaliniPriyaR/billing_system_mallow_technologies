@@ -41,6 +41,7 @@ gem "thruster", require: false
 gem "image_processing", "~> 1.2"
 
 group :development, :test do
+  gem 'byebug', platforms: %i[mri mingw x64_mingw]
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem "debug", platforms: %i[ mri windows ], require: "debug/prelude"
 
@@ -66,3 +67,4 @@ group :test do
 end
 
 gem "rspec-rails", "~> 8.0", :groups => [:development, :test]
+gem 'byebug', platforms: %i[mri mingw x64_mingw], :groups => [:development, :test]

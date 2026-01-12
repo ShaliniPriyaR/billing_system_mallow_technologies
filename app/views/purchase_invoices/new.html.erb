@@ -1,11 +1,153 @@
-<% content_for :title, "New purchase invoice" %>
+<% if flash[:alert].present? %>
+  <div style="color: red; margin-bottom: 20px;">
+    <%= flash[:alert] %>
+  </div>
+<% end %>
 
-<h1>New purchase invoice</h1>
+<h2>Billing Page</h2>
 
-<%= render "form", purchase_invoice: @purchase_invoice %>
+<%= form_with scope: :purchase_invoice,
+              url: purchase_invoices_path,
+              method: :post,
+              id: "invoice-form",
+              local: true do |f| %>
 
-<br>
+  <!-- Email -->
+  <div style="margin-bottom: 30px;">
+    <label>Customer Email</label><br><br>
+    <%= f.email_field :email, id: "email", placeholder: "Email ID",
+          required: true, style: "width: 250px; padding: 6px;" %>
+  </div>
 
-<div>
-  <%= link_to "Back to purchase invoices", purchase_invoices_path %>
-</div>
+  <!-- Bill Section -->
+  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+    <label>Bill section</label>
+
+    <button type="button"
+            id="add-item"
+            style="padding: 6px 15px; background-color: grey; color: white; border: none;">
+      Add New
+    </button>
+  </div>
+
+  <div id="items"></div>
+
+  <!-- Separator -->
+  <hr style="margin: 40px 0;">
+
+  <!-- Denominations (shop availability – read-only) -->
+  <label>Denominations</label><br><br>
+  <div style="margin-left: 20px;">
+    <% @denominations.each do |d| %>
+      <div style="margin-bottom: 10px;">
+        <span style="display: inline-block; width: 40px;"><%= d.value %></span>
+        <input type="number" value="<%= d.available_count %>" disabled>
+      </div>
+    <% end %>
+  </div>
+
+  <!-- Cash Paid -->
+  <div style="margin-top: 30px;">
+    <label>Cash paid by customer</label><br><br>
+    <%= f.number_field :paid_amount,
+          id: "paid_amount",
+          placeholder: "Amount",
+          min: 0,
+          step: 1,
+          required: true,
+          style: "width: 250px; padding: 6px;" %>
+  </div>
+
+  <br>
+
+  <%= f.submit "Generate Bill", style: "padding: 8px 20px; background-color: #ccc; text-decoration: none; color: black;" %>
+
+<br><br>
+<%= link_to "Back to Invoices", purchase_invoices_path,
+      style: "padding: 8px 20px; background-color: #ccc; text-decoration: none; color: black;" %>
+
+<% end %>
+
+<script>
+  const products = <%= raw @products.to_json(only: [:id, :name, :stock_available]) %>;
+
+  function selectedProductIds() {
+    return Array.from(document.querySelectorAll(".product-select"))
+      .map(s => s.value)
+      .filter(v => v);
+  }
+
+  function addItemRow() {
+    const used = selectedProductIds();
+    const available = products.filter(
+      p => !used.includes(p.id.toString()) && p.stock_available > 0
+    );
+
+    if (available.length === 0) {
+      document.getElementById("add-item").disabled = true;
+      return;
+    }
+
+    const row = document.createElement("div");
+    row.style.marginBottom = "10px";
+
+    let options = `<option value="">Select Product</option>`;
+    available.forEach(p => {
+      options += `<option value="${p.id}">${p.name}</option>`;
+    });
+
+    row.innerHTML = `
+      <select class="product-select"
+              name="purchase_invoice[items][][id]"
+              onchange="enableQuantity(this)">
+        ${options}
+      </select>
+
+      <input type="number"
+             name="purchase_invoice[items][][quantity]"
+             min="1"
+             placeholder="Quantity"
+             disabled
+             required>
+    `;
+
+    document.getElementById("items").appendChild(row);
+  }
+
+  function enableQuantity(selectEl) {
+    const qtyInput = selectEl.nextElementSibling;
+    qtyInput.disabled = !selectEl.value;
+
+    const totalSelectable =
+      products.filter(p => p.stock_available > 0).length;
+
+    if (selectedProductIds().length >= totalSelectable) {
+      document.getElementById("add-item").disabled = true;
+    }
+  }
+
+  document.getElementById("add-item").addEventListener("click", addItemRow);
+
+  // Initial row
+  addItemRow();
+
+  // Client-side mandatory validation
+  document.getElementById("invoice-form").addEventListener("submit", function(e) {
+    if (!document.getElementById("email").value) {
+      alert("Customer email is required");
+      e.preventDefault();
+      return;
+    }
+
+    if (document.querySelectorAll(".product-select").length === 0) {
+      alert("At least one item is required");
+      e.preventDefault();
+      return;
+    }
+
+    if (!document.getElementById("paid_amount").value) {
+      alert("Cash paid is required");
+      e.preventDefault();
+    }
+  });
+</script>

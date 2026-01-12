@@ -1,0 +1,62 @@
+<h1>Invoice <%= @invoice.invoice_number %></h1>
+
+<p>
+  Hi,<br>
+  Thank you for your purchase. Here are the details of your invoice:
+</p>
+
+<hr>
+
+<h3>Purchased Items</h3>
+
+<table border="1" cellpadding="6" cellspacing="0" style="border-collapse: collapse; width: 100%;">
+  <thead style="background-color: #f3f3f3;">
+    <tr>
+      <th align="left">Product Name</th>
+      <th align="right">Quantity</th>
+      <th align="right">Net Price</th>
+      <th align="right">Tax Amount</th>
+      <th align="right">Line Total</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @invoice.invoice_items.includes(:product).each do |item| %>
+      <% product      = item.product %>
+      <% line_amount  = item.unit_price * item.quantity %>
+      <% line_tax     = (line_amount * item.tax_percentage.to_d) / 100 %>
+      <% line_total   = line_amount + line_tax %>
+
+      <tr>
+        <td><%= product.name %></td>
+        <td align="right"><%= item.quantity %></td>
+        <td align="right"><%= number_with_precision(line_amount, precision: 2) %></td>
+        <td align="right"><%= number_with_precision(line_tax, precision: 2) %></td>
+        <td align="right"><%= number_with_precision(line_total, precision: 2) %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<hr>
+
+<h3>Summary</h3>
+
+<table cellpadding="4" cellspacing="0" style="margin-top: 5px;">
+  <tr>
+    <td>Total Amount(after Round off):</td>
+    <td><strong><%= number_with_precision(@invoice.total_amount.floor, precision: 2) %></strong></td>
+  </tr>
+  <tr>
+    <td>Amount paid by customer:</td>
+    <td><strong><%= number_with_precision(@invoice.paid_amount, precision: 2) %></strong></td>
+  </tr>
+  <tr>
+    <td>Balance given to customer:</td>
+    <td><strong><%= number_with_precision(@invoice.balance_amount, precision: 2) %></strong></td>
+  </tr>
+</table>
+
+<p>
+  Regards,<br>
+  Billing System
+</p>

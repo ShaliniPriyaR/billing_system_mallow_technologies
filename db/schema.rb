@@ -10,28 +10,30 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_01_11_123639) do
+ActiveRecord::Schema[8.1].define(version: 2026_01_11_145853) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pgcrypto"
 
-  create_table "customers", force: :cascade do |t|
+  create_table "customers", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.datetime "created_at", null: false
     t.string "email"
     t.datetime "updated_at", null: false
+    t.index ["email"], name: "index_customers_on_email", unique: true
   end
 
-  create_table "denominations", force: :cascade do |t|
+  create_table "denominations", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.integer "available_count"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "value"
+    t.index ["value"], name: "index_denominations_on_value", unique: true
   end
 
-  create_table "invoice_items", force: :cascade do |t|
+  create_table "invoice_items", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.datetime "created_at", null: false
-    t.bigint "product_id", null: false
-    t.bigint "purchase_invoice_id", null: false
+    t.uuid "product_id", null: false
+    t.uuid "purchase_invoice_id", null: false
     t.integer "quantity"
     t.decimal "tax_percentage"
     t.decimal "unit_price"
@@ -40,7 +42,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_11_123639) do
     t.index ["purchase_invoice_id"], name: "index_invoice_items_on_purchase_invoice_id"
   end
 
-  create_table "products", force: :cascade do |t|
+  create_table "products", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.datetime "created_at", null: false
     t.string "name"
     t.string "product_code"
@@ -48,19 +50,23 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_11_123639) do
     t.decimal "tax_percentage"
     t.decimal "unit_price"
     t.datetime "updated_at", null: false
+    t.index ["product_code"], name: "index_products_on_product_code", unique: true
   end
 
-  create_table "purchase_invoices", force: :cascade do |t|
+  create_table "purchase_invoices", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.decimal "balance_amount"
     t.jsonb "change_denominations"
     t.datetime "created_at", null: false
-    t.bigint "customer_id", null: false
+    t.uuid "customer_id", null: false
     t.string "invoice_number"
     t.decimal "paid_amount"
     t.decimal "subtotal_amount"
+    t.decimal "tax_amount"
     t.decimal "total_amount"
     t.datetime "updated_at", null: false
+    t.index ["created_at"], name: "index_purchase_invoices_on_created_at"
     t.index ["customer_id"], name: "index_purchase_invoices_on_customer_id"
+    t.index ["invoice_number"], name: "index_purchase_invoices_on_invoice_number", unique: true
   end
 
   add_foreign_key "invoice_items", "products"

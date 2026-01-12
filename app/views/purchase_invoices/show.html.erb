@@ -1,10 +1,114 @@
-<p style="color: green"><%= notice %></p>
+<h2 style="text-align: center; margin-bottom: 30px;">Invoice Summary</h2>
 
-<%= render @purchase_invoice %>
-
-<div>
-  <%= link_to "Edit this purchase invoice", edit_purchase_invoice_path(@purchase_invoice) %> |
-  <%= link_to "Back to purchase invoices", purchase_invoices_path %>
-
-  <%= button_to "Destroy this purchase invoice", @purchase_invoice, method: :delete %>
+<div style="margin-bottom: 20px;">
+  <p><strong>Invoice Number:</strong> <%= @purchase_invoice.invoice_number %></p>
+  <p><strong>Customer Email:</strong> <%= @purchase_invoice.customer.email %></p>
 </div>
+
+<h3>Bill section</h3>
+
+<table border="1" cellpadding="8" cellspacing="0"
+       style="width: 100%; border-collapse: collapse; margin-top: 15px;">
+  <thead style="background-color: #f3f3f3;">
+    <tr>
+      <th>Product Code</th>
+      <th>Product Name</th>
+      <th>Unit Price</th>
+      <th>Quantity</th>
+      <th>Net Price</th>
+      <th>Tax %</th>
+      <th>Tax Amount</th>
+      <th>Total Amount</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @purchase_invoice.invoice_items.each do |item| %>
+      <% product = item.product %>
+
+      <% item_price       = item.unit_price * item.quantity %>
+      <% item_tax_amount  = (item_price * item.tax_percentage.to_d) / 100 %>
+      <% item_total       = item_price + item_tax_amount %>
+
+      <tr>
+        <td><%= product.product_code %></td>
+        <td><%= product.name %></td>
+        <td><%= number_with_precision(item.unit_price, precision: 2) %></td>
+        <td><%= item.quantity %></td>
+        <td><%= number_with_precision(item_price, precision: 2) %></td>
+        <td><%= item.tax_percentage || 0.0 %>%</td>
+        <td><%= number_with_precision(item_tax_amount, precision: 2) %></td>
+        <td><%= number_with_precision(item_total, precision: 2) %></td>
+      </tr>
+
+    <% end %>
+  </tbody>
+</table>
+
+</br>
+<div style="margin-left: 10px;">
+
+  <p><strong>Total price without tax:</strong>
+    <%= number_with_precision(@purchase_invoice.subtotal_amount, precision: 2) %>
+  </p>
+
+  <p><strong>Total tax payable:</strong>
+    <%= number_with_precision(@purchase_invoice.tax_amount, precision: 2) %>
+  </p>
+
+  <p><strong>Net price of the purchased item:</strong>
+    <%= number_with_precision(@purchase_invoice.total_amount, precision: 2) %>
+  </p>
+
+  <p><strong>Rounded down value of the purchased items net price:</strong>
+    <%= number_with_precision(@purchase_invoice.total_amount.floor, precision: 2) %>
+  </p>
+
+  <p><strong>Amount Paid by the customer:</strong>
+    <%= number_with_precision(@purchase_invoice.paid_amount, precision: 2) %>
+  </p>
+
+  <p><strong>Balance payable to the customer:</strong>
+    <%= number_with_precision(@purchase_invoice.balance_amount, precision: 2) %>
+  </p>
+
+</div>
+
+<hr style="margin: 30px 0;">
+
+<h3>Balance Denominations:</h3>
+
+<% balance = @purchase_invoice.change_denominations || {} %>
+
+<% if balance.empty? %>
+  <p>No change to return.</p>
+<% else %>
+
+  <table border="1" cellpadding="6" cellspacing="0"
+         style="border-collapse: collapse; width: 300px;">
+    <thead style="background-color: #f3f3f3;">
+      <tr>
+        <th>Denomination</th>
+        <th>Count</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% balance.each do |value, count| %>
+        <% next if count.to_i <= 0 %>
+
+        <tr>
+          <td><%= value %></td>
+          <td><%= count %></td>
+        </tr>
+
+      <% end %>
+    </tbody>
+  </table>
+
+<% end %>
+
+<br><br>
+
+<%= link_to "Back to Invoices", purchase_invoices_path,
+      style: "padding: 8px 20px; background-color: #ccc; text-decoration: none; color: black;" %>

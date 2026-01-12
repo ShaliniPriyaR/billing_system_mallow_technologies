@@ -2,15 +2,41 @@
 
 <% content_for :title, "Purchase invoices" %>
 
-<h1>Purchase invoices</h1>
+<h1>Purchase Invoices</h1>
 
-<div id="purchase_invoices">
-  <% @purchase_invoices.each do |purchase_invoice| %>
-    <%= render purchase_invoice %>
-    <p>
-      <%= link_to "Show this purchase invoice", purchase_invoice %>
-    </p>
+<div style="margin-bottom: 20px;">
+  <%= form_with url: purchase_invoices_path, method: :get, local: true do %>
+    <label>Filter by Email:</label>
+    <%= text_field_tag :email, params[:email], placeholder: "Enter email", style: "padding: 6px; width: 250px;" %>
+
+    <%= submit_tag "Search", style: "padding: 6px 15px; margin-left: 10px;" %>
   <% end %>
 </div>
 
-<%= link_to "New purchase invoice", new_purchase_invoice_path %>
+<table border="1" cellpadding="8" cellspacing="0" style="border-collapse: collapse; width: 100%; margin-top: 20px;">
+  <thead style="background-color: #f3f3f3;">
+    <tr>
+      <th>Invoice Number</th>
+      <th>Email</th>
+      <th>Total Amount</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @invoices.each do |invoice| %>
+      <tr>
+        <td><%= invoice.invoice_number %></td>
+        <td><%= invoice.customer&.email %></td>
+        <td><%= number_with_precision(invoice.total_amount, precision: 2) %></td>
+        <td><%= link_to "Show", invoice %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to "New Purchase Invoice", new_purchase_invoice_path %>
+<br><br>
+<%= link_to "Back to Home Page", root_path %>

@@ -53,6 +53,6 @@ class PurchaseInvoicesController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def purchase_invoice_params
-      params.require(:purchase_invoice).permit(:email, :paid_amount, items: [:id, :quantity])
+      params.require(:purchase_invoice).permit(:email, :paid_amount, items: [ :id, :quantity ])
     end
 end

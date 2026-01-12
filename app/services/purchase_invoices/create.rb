@@ -50,7 +50,7 @@ module PurchaseInvoices
         balance_amount: (paid_amount - rounded_total).floor
       }
 
-      [@params[:email], invoice_params, items]
+      [ @params[:email], invoice_params, items ]
     end
 
     def calculate_amounts(items)
@@ -68,7 +68,7 @@ module PurchaseInvoices
         tax_total += line_tax
       end
 
-      [subtotal, tax_total, subtotal + tax_total]
+      [ subtotal, tax_total, subtotal + tax_total ]
     end
 
     def create_items!(items)
@@ -112,7 +112,7 @@ module PurchaseInvoices
       Denomination.lock.order(value: :desc).each do |denom|
         break if remaining.zero?
 
-        count = [remaining / denom.value, denom.available_count].min
+        count = [ remaining / denom.value, denom.available_count ].min
         next if count.zero?
 
         change_map[denom.value] = count

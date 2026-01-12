@@ -1,7 +1,7 @@
 class PurchaseInvoice < ApplicationRecord
   belongs_to :customer
   validates :invoice_number, presence: true, uniqueness: true
-  validates :paid_amount, presence: true, numericality: {greater_than_or_equal_to: 0}
+  validates :paid_amount, presence: true, numericality: { greater_than_or_equal_to: 0 }
 
   has_many :invoice_items, dependent: :destroy
 
